@@ -127,5 +127,5 @@ static PyMethodDef UrgMethods[] = {
 PyMODINIT_FUNC
 init_liburg(void)
 {
-  (void) Py_InitModule("liburg", UrgMethods);
+  (void) Py_InitModule("_liburg", UrgMethods);
 }
