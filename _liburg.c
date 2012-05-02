@@ -37,7 +37,9 @@ test_urg(PyObject *self, PyObject *args)
     CaptureTimes = 10,
   };
 
-  const char device[] = "/dev/tty.usbmodemfd111";   /* test */
+  const char *device;
+  if (!PyArg_ParseTuple(args, "s", &device))
+    return NULL;
 
   int data_max;
   long* data;
@@ -119,7 +121,7 @@ test_urg(PyObject *self, PyObject *args)
 
 static PyMethodDef UrgMethods[] = {
   {"test_urg", test_urg, METH_VARARGS,
-   "test urg sensor"},
+   "test urg sensor (please set device name)"},
   {NULL, NULL, 0, NULL}
 };
 
