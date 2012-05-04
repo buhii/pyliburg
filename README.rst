@@ -2,7 +2,8 @@ pyliburg
 ========
 
 Python library to access Hokuyo URG laser range scanners (for Mac and Linux)
-Windows is not supported yet.
+
+This is a development version, and Windows is not supported yet.
 
 
 Install
@@ -20,3 +21,4 @@ Install
 License
 =======
 LGPL
+
