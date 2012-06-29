@@ -36,7 +36,6 @@ setup(name='pyliburg',
       author_email='tk@buhii.org',
       url='https://github.com/buhii/pyliburg',
       license='LGPL',
-      package_dir={'': 'src'},
-      packages=['pyliburg'],
+      py_modules=['pyliburg'],
       ext_modules=[liburg_ext],
       )

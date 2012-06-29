@@ -20,3 +20,8 @@
 }
 
 %include "urg_wrapper.hpp"
+
+%pythoncode
+%{
+  UrgDevice = urg_wrapper
+%}
