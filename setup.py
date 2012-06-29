@@ -18,7 +18,7 @@ for tpl in os.walk(DIR_LIBURG + '/src/c'):
                 'serial_ctrl_lin.c' not in filename:
             sources.append(os.path.join(tpl[0], filename))
 
-liburg_ext = Extension('_liburg',
+liburg_ext = Extension('_pyliburg',
                        include_dirs=[DIR_LIBURG + '/include/c',
                                      'liburg/src/c/connection',
                                      'liburg/src/c/system',

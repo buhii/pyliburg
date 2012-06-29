@@ -7,20 +7,16 @@
 
 %{
   #include <Python.h>
+  #include "urg_wrapper.hpp"
 %}
 
-%typemap(out) int *
+%typemap(out) long *
 {
-  $result = PyTuple_New(DETECTOR_TUPLE_LENGTH);
-  for (int i = 0; i < DETECTOR_TUPLE_LENGTH; i++) {
+  $result = PyTuple_New(MEASURE_DATA_LENGTH);
+  for (int i = 0; i < MEASURE_DATA_LENGTH; i++) {
     PyObject *o = PyInt_FromLong( $1[i] );
     PyTuple_SetItem($result, i, o);
   }
 }
-
-
-%{
-  #include "urg_wrapper.hpp"
-%}
 
 %include "urg_wrapper.hpp"

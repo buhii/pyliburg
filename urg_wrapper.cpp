@@ -4,63 +4,72 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "urg_wrapper.hpp"
+#include <iostream>
 
 using namespace std;
 
 urg_wrapper::urg_wrapper(void)
 {
+  urg_initialize(&urg);
 }
 
-urg_wrapper::urg_wrapper(const char * serial, int begin_index, int end_index)
+urg_wrapper::urg_wrapper(const char * device)
 {
-
+  int ret;
+  urg_initialize(&urg);
+  ret = urg_connect(&urg, device, 115200);
+  if (ret < 0) {
+    cout << "can't connect '" << device << "'!\n";
+  } else {
+    urg_parameters(&urg, &parameter);
+    first_index = parameter.area_front_ - MEASURE_DATA_LENGTH / 2;
+    last_index = first_index + MEASURE_DATA_LENGTH - 1;
+  }
 }
 
 urg_wrapper::~urg_wrapper(void)
 {
+  urg_disconnect(&urg);
 }
 
-long urg_wrapper::min_distance(void)
+long urg_wrapper::minDistance(void)
 {
-
+  return urg_minDistance(&urg);
 }
 
-long urg_wrapper::max_distance(void)
+long urg_wrapper::maxDistance(void)
 {
-
+  return urg_maxDistance(&urg);
 }
 
-double urg_wrapper::index2rad(const int index)
+int urg_wrapper::scanMsec(void)
 {
+  return urg_scanMsec(&urg);
 }
 
-int urg_wrapper::rad2index(const double radian)
+double urg_wrapper::index2deg(const int index)
 {
+  return urg_index2deg(&urg, index);
+}
+
+int urg_wrapper::deg2index(const int deg)
+{
+  return urg_deg2index(&urg, deg);
 }
 
 long * urg_wrapper::capture(void)
 {
-  /*
-  int i;
-  for (i = 0; i < 8; i++) {
-    result[i] = 0;
+  /* Get only front data */
+  int ret, n;
+  ret = urg_requestData(&urg, URG_GD, first_index, last_index);
+  if (ret < 0) {
+    cout << "can't request data!\n";
   }
-  detector->detect(input_image);
 
-  if (detector->pattern_is_detected) {
-    result[0] = detector->detected_u_corner[0];
-    result[1] = detector->detected_v_corner[0];
-    result[2] = detector->detected_u_corner[1];
-    result[3] = detector->detected_v_corner[1];
-    result[4] = detector->detected_u_corner[2];
-    result[5] = detector->detected_v_corner[2];
-    result[6] = detector->detected_u_corner[3];
-    result[7] = detector->detected_v_corner[3];
-    cout << "[wrapper] pt1: " << result[0] << "," << result[1] << endl;
-    cout << "[wrapper] pt2: " << result[2] << "," << result[3] << endl;
-    cout << "[wrapper] pt3: " << result[4] << "," << result[5] << endl;
-    cout << "[wrapper] pt4: " << result[6] << "," << result[7] << endl;
+  /* Reception */
+  n = urg_receivePartialData(&urg, distances, MEASURE_DATA_LENGTH, first_index, last_index);
+  if (n < 0) {
+    cout << "can't receive partial data!\n";
   }
-  return result;
-  */
+  return distances;
 }
