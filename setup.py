@@ -5,13 +5,13 @@ from setuptools import setup, Extension
 
 
 sys.path.append('./src')
-#sys.path.append('./test')
+DIR_LIBURG = "liburg"
 
 version = file('VERSION').read().strip()
 
 # get sources
-sources = ['_liburg.c']
-for tpl in os.walk('liburg/src/c'):
+sources = ['_liburg.i', 'urg_wrapper.cpp']
+for tpl in os.walk(DIR_LIBURG + '/src/c'):
     for filename in tpl[2]:
         if '.c' in filename and \
                 'win' not in filename and \
@@ -19,16 +19,17 @@ for tpl in os.walk('liburg/src/c'):
             sources.append(os.path.join(tpl[0], filename))
 
 liburg_ext = Extension('_liburg',
-                       include_dirs=['liburg/include/c',
+                       include_dirs=[DIR_LIBURG + '/include/c',
                                      'liburg/src/c/connection',
                                      'liburg/src/c/system',
                                      'liburg/src/c/urg'],
+                       swig_opts=['-c++'],
                        sources=sources)
 
 setup(name='pyliburg',
       version=version,
       description="python library to access Hokuyo URG laser range scanners",
-      long_description=file('liburg/README').read(),
+      long_description=file(DIR_LIBURG + '/README').read(),
       classifiers=[],
       keywords=('hardware, sensors, URG'),
       author='Takahiro Kamatani',
@@ -38,6 +39,4 @@ setup(name='pyliburg',
       package_dir={'': 'src'},
       packages=['pyliburg'],
       ext_modules=[liburg_ext],
-      #install_requires=["numpy","PIL"],
-      #test_suite='test_ccv.suite'
       )
