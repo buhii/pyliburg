@@ -70,6 +70,8 @@ long * urg_wrapper::capture(void)
   n = urg_receivePartialData(&urg, distances, MEASURE_DATA_LENGTH, first_index, last_index);
   if (n < 0) {
     cout << "can't receive partial data!\n";
+    for (int i = 0; i < MEASURE_DATA_LENGTH; i++)
+      distances[i] = -1;
   }
   return distances;
 }
